@@ -133,9 +133,9 @@ class Keuangan extends Admin_Controller {
 		$realisasi = array();
 		foreach ($data['realisasi'] as $r)
 		{
-			if(!empty($r['Nilai']) || !is_null($r['Nilai']))
+			if(!empty($r['realisasi']) || !is_null($r['realisasi']))
 			{
-				$realisasi[] =  $r['Nilai'];
+				$realisasi[] =  $r['realisasi'];
 			}
 			else
 			{
@@ -170,9 +170,9 @@ class Keuangan extends Admin_Controller {
 		$realisasi = array();
 		foreach ($data['realisasi'] as $s)
 		{
-			if(!empty($s['Nilai']) || !is_null($s['Nilai']))
+			if(!empty($s['realisasi']) || !is_null($s['realisasi']))
 			{
-				$realisasi[] =  $s['Nilai'];
+				$realisasi[] =  $s['realisasi'];
 			}
 			else
 			{
@@ -202,14 +202,21 @@ class Keuangan extends Admin_Controller {
 		$anggaran = array();
 		foreach ($data['anggaran'] as $a)
 		{
-			$anggaran[] = $a['Pagu'];
+      if(!empty($a['Pagu']) || !is_null($a['Pagu']))
+      {
+        $anggaran[] =  $a['Pagu'];
+      }
+      else
+      {
+        $anggaran[] =  0;
+      }
 		}
 		$realisasi = array();
 		foreach ($data['realisasi'] as $r)
 		{
-			if(!empty($r['Nilai']) || !is_null($r['Nilai']))
+			if(!empty($r['realisasi']) || !is_null($r['realisasi']))
 			{
-				$realisasi[] =  $r['Nilai'];
+				$realisasi[] =  $r['realisasi'];
 			}
 			else
 			{
