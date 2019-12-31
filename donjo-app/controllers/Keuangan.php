@@ -353,4 +353,17 @@ class Keuangan extends Admin_Controller {
 		if (!$outp) $_SESSION['success'] = -1;
 		redirect('keuangan/impor_data');
 	}
+
+	public function pilih_desa($id_master)
+	{
+		$data['desa_ganda'] = $this->keuangan_model->cek_desa($id_master);
+		$data['id_master'] = $id_master;
+		$this->load->view('keuangan/pilih_desa', $data);
+	}
+
+	public function bersihkan_desa($id_master)
+	{
+		$this->keuangan_model->bersihkan_desa($id_master, $this->input->post('kode_desa'));
+		redirect('keuangan/impor_data');
+	}
 }
