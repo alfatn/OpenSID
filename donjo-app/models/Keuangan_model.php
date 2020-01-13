@@ -161,7 +161,8 @@ class Keuangan_model extends CI_model {
     # read the file's data:
     $path = sprintf('zip://%s#%s', $zip_file, $file_in_zip);
     $file_data = file_get_contents($path);
-    $file_data = preg_split('/[\r\n]{1,2}(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $file_data);
+    //$file_data = preg_split('/[\r\n]{1,2}(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/', $file_data);
+    $file_data = preg_split('/\r*\n+|\r+/', $file_data);
     $csv = array_map('str_getcsv', $file_data);
     array_walk($csv, function(&$a) use ($csv) {
       $a = array_combine($csv[0], $a);
