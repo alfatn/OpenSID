@@ -20,10 +20,9 @@ class Keuangan_grafik_model extends CI_model {
     $this->db->group_by('jenis_belanja');
     $data['anggaran'] = $this->db->get('keuangan_ta_rab_rinci')->result_array();
 
-
     $data['realisasi'] = array(
       $this->total_realisasi_pendapatan($thn)[0],
-      $this->total_realisasi_belanja($smt, $thn)[0]
+      $this->total_realisasi_belanja($thn)[0]
     );
 
     return $data;
@@ -166,6 +165,13 @@ class Keuangan_grafik_model extends CI_model {
     $this->db->select('SUM(Nilai) AS realisasi');
     $this->db->where('Tahun', $thn);
     return $this->db->get('keuangan_ta_tbp_rinci')->result_array();
+  }
+
+  private function total_realisasi_belanja($thn)
+  {
+    $this->db->select('SUM(Nilai) AS realisasi');
+    $this->db->where('Tahun', $thn);
+    return $this->db->get('keuangan_ta_spp_rinci')->result_array();
   }
 
   private function pagu_akun($akun, $thn)
