@@ -1,4 +1,4 @@
-<div id="<?= $type . '-' . $smt . '-' . $thn ?>" ></div>
+<div id="<?= $type . '-' . $thn ?>" ></div>
 
 <script type="text/javascript">
 	$(document).ready(function (){
@@ -8,18 +8,18 @@
 		var marginTop = 70;
 		var marginRight = 10;
 		var marginBottom = 50;
-		var marginLeft = 100;
-		var groupPadding = 1;
+		var marginLeft = 250;
+		var groupPadding = 0;
 		var pointPadding = 0.3;
 		var chartHeight = marginTop + marginBottom + ((pointWidth * countData) * (1 + groupPadding + pointPadding));
-			
+
 		Highcharts.setOptions({
 			lang: {
 				thousandsSep: '.'
 			}
 		})
-		
-		Highcharts.chart("<?= $type . '-' . $smt . '-' . $thn ?>", {
+
+		Highcharts.chart("<?= $type . '-' . $thn ?>", {
 	    chart: {
 				type: 'bar',
 				marginTop: marginTop,
@@ -29,15 +29,15 @@
 				height: chartHeight
 	    },
 	    title: {
-        text: 'Pembiayaan Desa'
+        text: 'Realisasi Belanja Desa'
 	    },
 	    subtitle: {
-        text: "<?= 'Semester '.$smt.' Tahun '.$thn ?>"
+        text: "<?= ' Tahun '.$thn ?>"
 	    },
 	    xAxis: {
-        categories: [<?= join($pembiayaan, ',')?>],
+        categories: [<?= join($bidang, ',')?>],
 	    },
-			yAxis: {
+	    yAxis: {
         min: 0,
         title: '',
         labels: {
@@ -76,7 +76,7 @@
 	    credits: {
         enabled: false
 	    },
-			series: [
+	    series: [
 		    {
 	        name: 'Anggaran',
 	        dataLabels: {
@@ -86,7 +86,7 @@
 	        },
 	        data: [<?= join($anggaran, ',') ?>]
         },
-        {
+				{
 	        name: 'Realisasi',
 	        dataLabels: {
 				    formatter: function () {
@@ -96,7 +96,7 @@
 				    	return ' (' + percent + ' %'+')';
 				    }
 			    },
-	        data: [<?= join($realisasi, ',') ?>]
+	        data: [<?= join($realisasi_biaya, ',') ?>]
 	    	}
 	    ]
 		});

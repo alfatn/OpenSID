@@ -1,4 +1,4 @@
-<div id="<?= $type . '-' . $smt . '-' . $thn ?>" ></div>
+<div id="<?= $type . '-' . $thn ?>" ></div>
 
 <script type="text/javascript">
 	$(document).ready(function (){
@@ -12,14 +12,14 @@
 		var groupPadding = 1;
 		var pointPadding = 0.3;
 		var chartHeight = marginTop + marginBottom + ((pointWidth * countData) * (1 + groupPadding + pointPadding));
-			
+
 		Highcharts.setOptions({
 			lang: {
 				thousandsSep: '.'
 			}
 		})
-		
-		Highcharts.chart("<?= $type . '-' . $smt . '-' . $thn ?>", {
+
+		Highcharts.chart("<?= $type . '-' . $thn ?>", {
 	    chart: {
 				type: 'bar',
 				marginTop: marginTop,
@@ -32,10 +32,10 @@
         text: 'Realisasi Pelaksanaan APBDesa'
 	    },
 	    subtitle: {
-        text: "<?= 'Semester '.$smt.' Tahun '.$thn ?>"
+        text: "<?= ' Tahun '.$thn ?>"
 	    },
 	    xAxis: {
-        categories: ['(PA) Pendapatan Desa', '(PA) Belanja Desa', '(PA) Pembiayaan Desa'],
+        categories: ['Pendapatan', 'Belanja', 'Pembiayaan'],
 	    },
 	    yAxis: {
         min: 0,
@@ -96,7 +96,7 @@
 				    	return ' (' + percent + ' %'+')';
 				    }
 			    },
-	        data: [<?= join($realisasi, ',') ?>]
+	        data: [<?= join($realisasi_pendapatan, ',') ?>, <?= join($realisasi_belanja, ',') ?>]
 	    	}
 	    ]
 		});

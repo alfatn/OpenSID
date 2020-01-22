@@ -1,4 +1,4 @@
-<div id="<?= $type . '-' . $smt . '-' . $thn ?>" ></div>
+<div id="<?= $type . '-' . $thn ?>" ></div>
 
 <script type="text/javascript">
 	$(document).ready(function (){
@@ -12,14 +12,14 @@
 		var groupPadding = 0;
 		var pointPadding = 0.3;
 		var chartHeight = marginTop + marginBottom + ((pointWidth * countData) * (1 + groupPadding + pointPadding));
-			
+
 		Highcharts.setOptions({
 			lang: {
 				thousandsSep: '.'
 			}
 		})
-		
-		Highcharts.chart("<?= $type . '-' . $smt . '-' . $thn ?>", {
+
+		Highcharts.chart("<?= $type . '-' . $thn ?>", {
 	    chart: {
 				type: 'bar',
 				marginTop: marginTop,
@@ -32,7 +32,7 @@
         text: 'Realisasi Belanja Desa'
 	    },
 	    subtitle: {
-        text: "<?= 'Semester '.$smt.' Tahun '.$thn ?>"
+        text: "<?= ' Tahun '.$thn ?>"
 	    },
 	    xAxis: {
         categories: [<?= join($bidang, ',')?>],
@@ -96,10 +96,10 @@
 				    	return ' (' + percent + ' %'+')';
 				    }
 			    },
-	        data: [<?= join($realisasi, ',') ?>]
+	        data: [<?= join($realisasi_belanja, ',') ?>]
 	    	}
 	    ]
 		});
-		
+
 	});
 </script>
