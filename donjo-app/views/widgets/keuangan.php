@@ -238,12 +238,13 @@
           });
     //Eksekusi chart dengan for loop
     chartData.forEach(function(subData, idx){
+      var realisasiAll = parseInt(subData['realisasi_pendapatan'] + subData['realisasi_belanja'] + subData['realisasi_bunga'] + subData['realisasi_biaya']);
       if(subData['nama']){
-        if((!subData['realisasi'] && !subData['anggaran'])){
+        if((!realisasiAll && !subData['anggaran'])){
           $("#grafik-container").append(
               "<div class='graph-sub' id='graph-sub-"+ idx +"'>"+ subData['nama'] + "</div><div id='graph-"+ idx +"' class='graph-not-available'>Data tidak tersedia.</div>");
         }else{
-          var persentase = parseInt(subData['realisasi']) / (parseInt(subData['realisasi']) + parseInt(subData['anggaran'])) * 100;
+          var persentase = parseInt(realisasiAll) / (parseInt(realisasiAll) + parseInt(subData['anggaran'])) * 100;
           if(isNaN(persentase)){
             persentase = 0;
           }
@@ -324,7 +325,7 @@
                 data: [parseInt(subData['anggaran'])],
                 dataLabels: {
                   formatter: function(){
-                    if(parseInt(subData['realisasi']) <= parseInt(subData['anggaran'])){
+                    if(parseInt(realisasiAll) <= parseInt(subData['anggaran'])){
                       return "Rp. " + Highcharts.numberFormat(subData['anggaran'], '.', ',');
                     }else{
                       return "";
@@ -340,11 +341,11 @@
               }, {
                 name: 'Realisasi',
                 color: '#b4eb34',
-                data: [parseInt(subData['realisasi'])],
+                data: [parseInt(realisasiAll)],
                 dataLabels: {
                   formatter: function(){
-                    if(parseInt(subData['realisasi']) > parseInt(subData['anggaran'])){
-                      return "Rp. " + Highcharts.numberFormat(subData['realisasi'], '.', ',');
+                    if(parseInt(realisasiAll) > parseInt(subData['anggaran'])){
+                      return "Rp. " + Highcharts.numberFormat(realisasiAll, '.', ',');
                     }else{
                       return "(" + persentase + "%)";
                     }
