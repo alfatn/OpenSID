@@ -282,57 +282,6 @@ class Keuangan_model extends CI_model {
     return $data->id;
   }
 
-  public function data_anggaran($id_keuangan_master)
-  {
-    $this->db->select_sum('Anggaran');
-    $this->db->select_sum('AnggaranPAK');
-    $this->db->select_sum('AnggaranStlhPAK');
-    $this->db->where('id_keuangan_master', $id_keuangan_master);
-    $result = $this->db->get('keuangan_ta_anggaran')->row();
-    return $result;
-  }
-
-  public function data_anggaran_tahun($thn)
-  {
-    $this->db->select_sum('Anggaran');
-    $this->db->select_sum('AnggaranPAK');
-    $this->db->select_sum('AnggaranStlhPAK');
-    $this->db->where('Tahun', $thn);
-    $result = $this->db->get('keuangan_ta_anggaran')->row();
-    return $result;
-  }
-
-  public function data_grafik_utama($thn)
-  {
-    $this->db->select_sum('AnggaranStlhPAK');
-    $this->db->where('Tahun', $thn);
-    $result['anggaran'] = $this->db->get('keuangan_ta_anggaran')->row();
-
-    $this->db->select_sum('Nilai');
-    $this->db->where('Tahun', $thn);
-    $result['realisasi'] = $this->db->get('keuangan_ta_spj_rinci')->row();
-
-    return $result;
-  }
-
-  public function pendapatan_desa($id_keuangan_master)
-  {
-    $this->db->select_sum('AnggaranStlhPAK');
-    $this->db->where('id_keuangan_master', $id_keuangan_master);
-    $this->db->like('KD_Rincian', '4.1.', 'after');
-    $result = $this->db->get('keuangan_ta_anggaran')->row();
-    return $result;
-  }
-
-  public function realisasi_pendapatan_desa($id_keuangan_master)
-  {
-    $this->db->select_sum('AnggaranStlhPAK');
-    $this->db->where('id_keuangan_master', $id_keuangan_master);
-    $this->db->like('Kd_Rincian', '4.1.', 'after');
-    $result = $this->db->get('keuangan_ta_rab')->row();
-    return $result;
-  }
-
   public function artikel_statis_keuangan()
   {
     $this->db->select('id, judul');
