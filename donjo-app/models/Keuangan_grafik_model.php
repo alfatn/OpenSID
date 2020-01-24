@@ -254,6 +254,7 @@ class Keuangan_grafik_model extends CI_model {
     {
       $data['belanja'][$i]['anggaran'] = $this->pagu_akun($p['Akun'], $thn);
       $data['belanja'][$i]['realisasi'] = $this->real_akun_belanja($p['Akun'], $thn);
+      $data['belanja'][$i]['realisasi_spj'] = $this->real_akun_belanja_spj($p['Akun'], $thn);
       $data['belanja'][$i]['sub_belanja'] = $this->get_subval_belanja($p['id_keuangan_master'], $p['Akun'], $thn);
     }
 
@@ -309,6 +310,7 @@ class Keuangan_grafik_model extends CI_model {
     {
       $data['belanja'][$i]['anggaran'] = $this->pagu_akun($p['Akun'], $thn);
       $data['belanja'][$i]['realisasi'] = $this->real_akun_belanja_smt1($p['Akun'], $thn);
+      $data['belanja'][$i]['realisasi_spj'] = $this->real_akun_belanja_smt1_spj($p['Akun'], $thn);
       $data['belanja'][$i]['sub_belanja'] = $this->get_subval_belanja_smt1($p['id_keuangan_master'], $p['Akun'], $thn);
     }
 
@@ -406,10 +408,21 @@ class Keuangan_grafik_model extends CI_model {
   private function real_akun_belanja($akun, $thn)
   {
     $this->db->select('LEFT(Kd_Rincian, 2) AS Akun, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spp', 'keuangan_ta_spp.No_SPP = keuangan_ta_spp_rinci.No_SPP', 'left');
+    $this->db->like('Kd_Rincian', $akun, 'after');
+    $this->db->where('keuangan_ta_spp_rinci.Tahun', $thn);
+    $this->db->where('keuangan_ta_spp.Jn_SPP', 'LS');
+    $this->db->group_by('Akun');
+    return $this->db->get('keuangan_ta_spp_rinci')->result_array();
+  }
+
+  private function real_akun_belanja_spj($akun, $thn)
+  {
+    $this->db->select('LEFT(Kd_Rincian, 2) AS Akun, SUM(Nilai) AS realisasi');
     $this->db->like('Kd_Rincian', $akun, 'after');
     $this->db->where('Tahun', $thn);
     $this->db->group_by('Akun');
-    return $this->db->get('keuangan_ta_spp_rinci')->result_array();
+    return $this->db->get('keuangan_ta_spj_rinci')->result_array();
   }
 
   private function real_akun_belanja_smt1($akun, $thn)
@@ -418,10 +431,23 @@ class Keuangan_grafik_model extends CI_model {
     $this->db->join('keuangan_ta_spp', 'keuangan_ta_spp.No_SPP = keuangan_ta_spp_rinci.No_SPP', 'left');
     $this->db->like('Kd_Rincian', $akun, 'after');
     $this->db->where('keuangan_ta_spp_rinci.Tahun', $thn);
+    $this->db->where('keuangan_ta_spp.Jn_SPP', 'LS');
     $this->db->where('keuangan_ta_spp.Tgl_SPP >=', '01/01/$thn 00:00:00');
     $this->db->where('keuangan_ta_spp.Tgl_SPP <=', '06/31/$thn 00:00:00');
     $this->db->group_by('Akun');
     return $this->db->get('keuangan_ta_spp_rinci')->result_array();
+  }
+
+  private function real_akun_belanja_smt1_spj($akun, $thn)
+  {
+    $this->db->select('LEFT(Kd_Rincian, 2) AS Akun, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spj', 'keuangan_ta_spj.No_SPJ = keuangan_ta_spj_rinci.No_SPJ', 'left');
+    $this->db->like('Kd_Rincian', $akun, 'after');
+    $this->db->where('keuangan_ta_spj_rinci.Tahun', $thn);
+    $this->db->where('keuangan_ta_spj.Tgl_SPJ >=', '01/01/$thn 00:00:00');
+    $this->db->where('keuangan_ta_spj.Tgl_SPJ <=', '06/31/$thn 00:00:00');
+    $this->db->group_by('Akun');
+    return $this->db->get('keuangan_ta_spj_rinci')->result_array();
   }
 
   private function real_akun_pembiayaan($akun, $thn)
@@ -508,6 +534,7 @@ class Keuangan_grafik_model extends CI_model {
     {
       $data[$i]['anggaran'] = $this->pagu_subval_belanja($d['Kelompok'], $thn);
       $data[$i]['realisasi'] = $this->real_subval_belanja($d['Kelompok'], $thn);
+      $data[$i]['realisasi_spj'] = $this->real_subval_belanja_spj($d['Kelompok'], $thn);
       $data[$i]['sub_belanja2'] = $this->sub_belanja2($id_keuangan_master, $d['Kelompok'], $thn);
     }
     return $data;
@@ -523,6 +550,7 @@ class Keuangan_grafik_model extends CI_model {
     {
       $data[$i]['anggaran'] = $this->pagu_subval_belanja($d['Kelompok'], $thn);
       $data[$i]['realisasi'] = $this->real_subval_belanja_smt1($d['Kelompok'], $thn);
+      $data[$i]['realisasi_spj'] = $this->real_subval_belanja_smt1_spj($d['Kelompok'], $thn);
       $data[$i]['sub_belanja2'] = $this->sub_belanja2_smt1($id_keuangan_master, $d['Kelompok'], $thn);
     }
     return $data;
@@ -672,10 +700,22 @@ class Keuangan_grafik_model extends CI_model {
   private function real_subval_belanja($kelompok, $thn)
   {
     $this->db->select('LEFT(Kd_Rincian, 4) AS Kelompok, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spp', 'keuangan_ta_spp.No_SPP = keuangan_ta_spp_rinci.No_SPP', 'left');
     $this->db->like('Kd_Rincian', $kelompok, 'after');
-    $this->db->where('Tahun', $thn);
+    $this->db->where('keuangan_ta_spp_rinci.Tahun', $thn);
+    $this->db->where('keuangan_ta_spp.Jn_SPP', 'LS');
     $this->db->group_by('Kelompok');
     return $this->db->get('keuangan_ta_spp_rinci')->result_array();
+  }
+
+  private function real_subval_belanja_spj($kelompok, $thn)
+  {
+    $this->db->select('LEFT(Kd_Rincian, 4) AS Kelompok, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spj', 'keuangan_ta_spj.No_SPJ = keuangan_ta_spj_rinci.No_SPJ', 'left');
+    $this->db->like('Kd_Rincian', $kelompok, 'after');
+    $this->db->where('keuangan_ta_spj_rinci.Tahun', $thn);
+    $this->db->group_by('Kelompok');
+    return $this->db->get('keuangan_ta_spj_rinci')->result_array();
   }
 
   private function real_subval_belanja_smt1($kelompok, $thn)
@@ -688,6 +728,18 @@ class Keuangan_grafik_model extends CI_model {
     $this->db->where('keuangan_ta_spp.Tgl_SPP <=', '06/31/$thn 00:00:00');
     $this->db->group_by('Kelompok');
     return $this->db->get('keuangan_ta_spp_rinci')->result_array();
+  }
+
+  private function real_subval_belanja_smt1_spj($kelompok, $thn)
+  {
+    $this->db->select('LEFT(Kd_Rincian, 4) AS Kelompok, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spj', 'keuangan_ta_spj.No_SPJ = keuangan_ta_spj_rinci.No_SPJ', 'left');
+    $this->db->like('Kd_Rincian', $kelompok, 'after');
+    $this->db->where('keuangan_ta_spj_rinci.Tahun', $thn);
+    $this->db->where('keuangan_ta_spj.Tgl_SPJ >=', '01/01/$thn 00:00:00');
+    $this->db->where('keuangan_ta_spj.Tgl_SPJ <=', '06/31/$thn 00:00:00');
+    $this->db->group_by('Kelompok');
+    return $this->db->get('keuangan_ta_spj_rinci')->result_array();
   }
 
   private function real_subval_pembiayaan($kelompok, $thn)
@@ -772,6 +824,7 @@ class Keuangan_grafik_model extends CI_model {
     {
       $data[$i]['anggaran'] = $this->pagu_belanja2($d['Jenis'], $thn);
       $data[$i]['realisasi'] = $this->real_belanja2($d['Jenis'], $thn);
+      $data[$i]['realisasi_spj'] = $this->real_belanja2_spj($d['Jenis'], $thn);
     }
     return $data;
   }
@@ -786,6 +839,7 @@ class Keuangan_grafik_model extends CI_model {
     {
       $data[$i]['anggaran'] = $this->pagu_belanja2($d['Jenis'], $thn);
       $data[$i]['realisasi'] = $this->real_belanja2_smt1($d['Jenis'], $thn);
+      $data[$i]['realisasi_spj'] = $this->real_belanja2_smt1_spj($d['Jenis'], $thn);
     }
     return $data;
   }
@@ -930,10 +984,22 @@ class Keuangan_grafik_model extends CI_model {
   private function real_belanja2($jenis, $thn)
   {
     $this->db->select('LEFT(Kd_Rincian, 6) AS Jenis, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spp', 'keuangan_ta_spp.No_SPP = keuangan_ta_spp_rinci.No_SPP', 'left');
     $this->db->like('Kd_Rincian', $jenis, 'after');
-    $this->db->where('Tahun', $thn);
+    $this->db->where('keuangan_ta_spp_rinci.Tahun', $thn);
+    $this->db->where('keuangan_ta_spp.Jn_SPP', 'LS');
     $this->db->group_by('Jenis');
     return $this->db->get('keuangan_ta_spp_rinci')->result_array();
+  }
+
+  private function real_belanja2_spj($jenis, $thn)
+  {
+    $this->db->select('LEFT(Kd_Rincian, 6) AS Jenis, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spj', 'keuangan_ta_spj.No_SPJ = keuangan_ta_spj_rinci.No_SPJ', 'left');
+    $this->db->like('Kd_Rincian', $jenis, 'after');
+    $this->db->where('keuangan_ta_spj_rinci.Tahun', $thn);
+    $this->db->group_by('Jenis');
+    return $this->db->get('keuangan_ta_spj_rinci')->result_array();
   }
 
   private function real_belanja2_smt1($jenis, $thn)
@@ -946,6 +1012,18 @@ class Keuangan_grafik_model extends CI_model {
     $this->db->where('keuangan_ta_spp.Tgl_SPP <=', '06/31/$thn 00:00:00');
     $this->db->group_by('Jenis');
     return $this->db->get('keuangan_ta_spp_rinci')->result_array();
+  }
+
+  private function real_belanja2_smt1_spj($jenis, $thn)
+  {
+    $this->db->select('LEFT(Kd_Rincian, 6) AS Jenis, SUM(Nilai) AS realisasi');
+    $this->db->join('keuangan_ta_spj', 'keuangan_ta_spj.No_SPJ = keuangan_ta_spj_rinci.No_SPJ', 'left');
+    $this->db->like('Kd_Rincian', $jenis, 'after');
+    $this->db->where('keuangan_ta_spj_rinci.Tahun', $thn);
+    $this->db->where('keuangan_ta_spj.Tgl_SPJ >=', '01/01/$thn 00:00:00');
+    $this->db->where('keuangan_ta_spj.Tgl_SPJ <=', '06/31/$thn 00:00:00');
+    $this->db->group_by('Jenis');
+    return $this->db->get('keuangan_ta_spj_rinci')->result_array();
   }
 
   private function real_pembiayaan2($jenis, $thn)
@@ -1119,11 +1197,11 @@ class Keuangan_grafik_model extends CI_model {
   private function data_keuangan_tema($tahun)
   {
     $data['res_pelaksanaan'] = $this->data_widget_pelaksanaan($tahun);
-    $data['res_pelaksanaan']['laporan'] = 'APBDes '. $tahun . '  Pelaksanaan';
+    $data['res_pelaksanaan']['laporan'] = 'APBDes '. $tahun . ' Pelaksanaan';
     $data['res_pendapatan'] = $this->data_widget_pendapatan($tahun);
-    $data['res_pendapatan']['laporan'] = 'APBDes '. $tahun . '  Pendapatan';
+    $data['res_pendapatan']['laporan'] = 'APBDes '. $tahun . ' Pendapatan';
     $data['res_belanja'] = $this->data_widget_belanja($tahun);
-    $data['res_belanja']['laporan'] = 'APBDes '. $tahun . '  Belanja';
+    $data['res_belanja']['laporan'] = 'APBDes '. $tahun . ' Pembelanjaan';
 
     return $data;
   }
