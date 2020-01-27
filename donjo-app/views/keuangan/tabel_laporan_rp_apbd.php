@@ -139,7 +139,7 @@
 	<tr class='bold highlighted'>
 		<td colspan='4' align='center'>SURPLUS / (DEFISIT)</td>
 		<td align='right'><?= number_format(($l['anggaran'][0]['pagu'])-($b['anggaran'][0]['pagu'])) ?></td>
-		<td align='right'><?= number_format(($l['realisasi'][0]['realisasi']+$l['realisasi_bunga'][0]['realisasi'])-($b['realisasi'][0]['realisasi']+$b['realisasi_spj'][0]['realisasi'])) ?></td>
+		<td align='right'><?= number_format(($l['realisasi'][0]['realisasi']+$l['realisasi_bunga'][0]['realisasi'])-($b['realisasi'][0]['realisasi']+$b['realisasi_spj'][0]['realisasi']+$b['realisasi_bunga'][0]['realisasi'])) ?></td>
 		<td align='right'><?= number_format((($l['anggaran'][0]['pagu'])-($b['anggaran'][0]['pagu']))-(($l['realisasi'][0]['realisasi']+$l['realisasi_bunga'][0]['realisasi'])-($b['realisasi'][0]['realisasi']+$b['realisasi_spj'][0]['realisasi']+$b['realisasi_bunga'][0]['realisasi'])))?></td>
 		<td align='right'><?= number_format((($l['anggaran'][0]['pagu'])-($b['anggaran'][0]['pagu']))/(($l['realisasi'][0]['realisasi']+$l['realisasi_bunga'][0]['realisasi'])-$b['realisasi'][0]['realisasi']+$b['realisasi_spj'][0]['realisasi']+$b['realisasi_bunga'][0]['realisasi'])*100, 2)?></td>
 	</tr>
