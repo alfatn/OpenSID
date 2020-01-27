@@ -141,17 +141,17 @@
     switch(tipe)
     {
       case "pelaksanaan":
-        var judulGrafik = 'Pelaksanaan APBDesa';
+        var judulGrafik = 'Pelaksanaan APBDes';
         var tipeGrafik = 'res_pelaksanaan';
         break;
 
       case "belanja":
-        var judulGrafik = 'Belanja Desa';
+        var judulGrafik = 'Belanja APBDes';
         var tipeGrafik = 'res_belanja';
         break;
 
       case "pendapatan":
-        var judulGrafik = 'Pendapatan Desa';
+        var judulGrafik = 'Pendapatan APBDes';
         var tipeGrafik = 'res_pendapatan';
         break;
     }
@@ -238,13 +238,12 @@
           });
     //Eksekusi chart dengan for loop
     chartData.forEach(function(subData, idx){
-      var realisasiAll = parseInt(subData['realisasi_pendapatan'] + subData['realisasi_belanja'] + subData['realisasi_bunga'] + subData['realisasi_biaya']);
       if(subData['nama']){
-        if((!realisasiAll && !subData['anggaran'])){
+        if((!subData['realisasi'] && !subData['anggaran'])){
           $("#grafik-container").append(
               "<div class='graph-sub' id='graph-sub-"+ idx +"'>"+ subData['nama'] + "</div><div id='graph-"+ idx +"' class='graph-not-available'>Data tidak tersedia.</div>");
         }else{
-          var persentase = parseInt(realisasiAll) / (parseInt(realisasiAll) + parseInt(subData['anggaran'])) * 100;
+          var persentase = parseInt(subData['realisasi']) / (parseInt(subData['realisasi']) + parseInt(subData['anggaran'])) * 100;
           if(isNaN(persentase)){
             persentase = 0;
           }
@@ -325,7 +324,7 @@
                 data: [parseInt(subData['anggaran'])],
                 dataLabels: {
                   formatter: function(){
-                    if(parseInt(realisasiAll) <= parseInt(subData['anggaran'])){
+                    if(parseInt(subData['realisasi']) <= parseInt(subData['anggaran'])){
                       return "Rp. " + Highcharts.numberFormat(subData['anggaran'], '.', ',');
                     }else{
                       return "";
@@ -341,11 +340,11 @@
               }, {
                 name: 'Realisasi',
                 color: '#b4eb34',
-                data: [parseInt(realisasiAll)],
+                data: [parseInt(subData['realisasi'])],
                 dataLabels: {
                   formatter: function(){
-                    if(parseInt(realisasiAll) > parseInt(subData['anggaran'])){
-                      return "Rp. " + Highcharts.numberFormat(realisasiAll, '.', ',');
+                    if(parseInt(subData['realisasi']) > parseInt(subData['anggaran'])){
+                      return "Rp. " + Highcharts.numberFormat(subData['realisasi'], '.', ',');
                     }else{
                       return "(" + persentase + "%)";
                     }
