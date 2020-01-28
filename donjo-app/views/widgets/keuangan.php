@@ -110,9 +110,9 @@
           <ul class="dropdown-menu dropdown-menu-left">
             <?php foreach ($widget_keuangan['tahun'] as $key):?>
               <li><a class="dropdown-item"><b><?= $key ?></b></a></li>
-              <li><a class="dropdown-item" onclick="gantiTipe('pelaksanaan'); gantiTahun('<?= $key ?>')">Realisasi Pelaksanaan APBDesa</a></li>
-              <li><a class="dropdown-item" onclick="gantiTipe('pendapatan'); gantiTahun('<?= $key ?>')">Realisasi Pendapatan Desa</a></li>
-              <li><a class="dropdown-item" onclick="gantiTipe('belanja'); gantiTahun('<?= $key ?>')">Realisasi Belanja Desa</a></li>
+              <li><a class="dropdown-item" onclick="gantiTipe('pelaksanaan'); gantiTahun('<?= $key ?>')">Pelaksanaan APBDes</a></li>
+              <li><a class="dropdown-item" onclick="gantiTipe('pendapatan'); gantiTahun('<?= $key ?>')">Pendapatan APBDes</a></li>
+              <li><a class="dropdown-item" onclick="gantiTipe('belanja'); gantiTahun('<?= $key ?>')">Belanja APBDes</a></li>
             <?php endforeach;?>
           </ul>
         </div>
