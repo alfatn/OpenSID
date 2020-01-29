@@ -116,22 +116,21 @@ class Keuangan_grafik_model extends CI_model {
 
   public function r_pd_widget($thn)
   {
-    $this->db->select('keuangan_ref_rek2.Kelompok, keuangan_ref_rek3.Jenis, keuangan_ref_rek3.Nama_Jenis');
+    $this->db->select('keuangan_ref_rek3.Jenis, keuangan_ref_rek3.Nama_Jenis');
     $this->db->join('keuangan_ref_rek2', 'keuangan_ref_rek2.id_keuangan_master = keuangan_master.id', 'left');
     $this->db->join('keuangan_ref_rek3', 'keuangan_ref_rek3.Kelompok = keuangan_ref_rek2.Kelompok', 'left');
-    //$this->db->where("Akun NOT LIKE '1.%'");
-    $this->db->where("Akun NOT LIKE '3.%'");
-    $this->db->where("Akun NOT LIKE '5.%'");
-    $this->db->where("Akun NOT LIKE '6.%'");
-    $this->db->where("Akun NOT LIKE '7.%'");
     $this->db->where("keuangan_ref_rek3.Jenis NOT LIKE '1.%'");
+    $this->db->where("keuangan_ref_rek3.Jenis NOT LIKE '3.%'");
+    $this->db->where("keuangan_ref_rek3.Jenis NOT LIKE '5.%'");
+    $this->db->where("keuangan_ref_rek3.Jenis NOT LIKE '6.%'");
+    $this->db->where("keuangan_ref_rek3.Jenis NOT LIKE '7.%'");
     $this->db->where("keuangan_ref_rek3.Nama_Jenis NOT LIKE '%Hutang%'");
-    $this->db->where("Nama_Jenis NOT LIKE 'Penerimaan dari Hasil Kerjasama dengan Pihak Ketiga%'");
-    $this->db->where("Nama_Jenis NOT LIKE 'Penerimaan Bantuan dari Perusahaan yang Berlokasi di Desa%'");
-    $this->db->where("Nama_Jenis NOT LIKE 'Koreksi Kesalahan Belanja Tahun-tahun Sebelumnya%'");
-    $this->db->where("Nama_Jenis NOT LIKE 'Lain-lain Pendapatan Desa Yang Sah%'");
+    $this->db->where("keuangan_ref_rek3.Nama_Jenis NOT LIKE 'Penerimaan dari Hasil Kerjasama dengan Pihak Ketiga%'");
+    $this->db->where("keuangan_ref_rek3.Nama_Jenis NOT LIKE 'Penerimaan Bantuan dari Perusahaan yang Berlokasi di Desa%'");
+    $this->db->where("keuangan_ref_rek3.Nama_Jenis NOT LIKE 'Koreksi Kesalahan Belanja Tahun-tahun Sebelumnya%'");
+    $this->db->where("keuangan_ref_rek3.Nama_Jenis NOT LIKE 'Lain-lain Pendapatan Desa Yang Sah%'");
     $this->db->where('tahun_anggaran', $thn);
-    $this->db->order_by('keuangan_ref_rek2.Kelompok', 'asc');
+    $this->db->order_by('keuangan_ref_rek3.Jenis', 'asc');
     $data['jenis_pendapatan'] = $this->db->get('keuangan_master')->result_array();
 
     $this->db->select('LEFT(Kd_Rincian, 6) AS jenis_pendapatan, SUM(AnggaranStlhPAK) AS pagu');
