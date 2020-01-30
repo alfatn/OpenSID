@@ -47,8 +47,8 @@ class Keuangan_grafik_model extends CI_model {
     $this->db->select('LEFT(Kd_Rincian, 2) AS jenis_pelaksanaan, SUM(Nilai) AS realisasi');
     $this->db->group_by('jenis_pelaksanaan');
     $this->db->where('Tahun', $thn);
-    $this->db->like('Kd_Rincian', '4.', 'after');
-    $this->db->like('Kd_Rincian', '5.', 'after');
+    //$this->db->like('Kd_Rincian', '4.', 'after');
+    //$this->db->like('Kd_Rincian', '5.', 'after');
     $data['realisasi_bunga'] = $this->db->get('keuangan_ta_mutasi')->result_array();
 
     $this->db->select('LEFT(Kd_Rincian, 2) AS jenis_pelaksanaan, SUM(Kredit) AS realisasi');
@@ -102,8 +102,8 @@ class Keuangan_grafik_model extends CI_model {
     $this->db->select('LEFT(Kd_Rincian, 2) AS jenis_pelaksanaan, SUM(Nilai) AS realisasi');
     $this->db->group_by('jenis_pelaksanaan');
     $this->db->where('Tahun', $thn);
-    $this->db->like('Kd_Rincian', '4.', 'after');
-    $this->db->like('Kd_Rincian', '5.', 'after');
+    //$this->db->like('Kd_Rincian', '4.', 'after');
+    //$this->db->like('Kd_Rincian', '5.', 'after');
     $data['realisasi_bunga'] = $this->db->get('keuangan_ta_mutasi')->result_array();
 
     $this->db->select('LEFT(Kd_Rincian, 2) AS jenis_pelaksanaan, SUM(Kredit) AS realisasi');
