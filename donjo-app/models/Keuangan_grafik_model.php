@@ -231,20 +231,6 @@ class Keuangan_grafik_model extends CI_model {
 		return $data;
   }
 
-  private function total_realisasi_pendapatan($thn)
-  {
-		$this->db->select('SUM(Nilai) AS realisasi');
-		$this->db->where('Tahun', $thn);
-		return $this->db->get('keuangan_ta_tbp_rinci')->result_array();
-  }
-
-  private function total_realisasi_belanja($thn)
-  {
-		$this->db->select('SUM(Nilai) AS realisasi');
-		$this->db->where('Tahun', $thn);
-		return $this->db->get('keuangan_ta_spp_rinci')->result_array();
-  }
-
   private function pagu_akun($akun, $thn)
   {
 		$this->db->select('LEFT(Kd_Rincian, 2) AS Akun, SUM(AnggaranStlhPAK) AS pagu');
